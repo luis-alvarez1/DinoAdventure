@@ -6,10 +6,10 @@ var GamePlay = {
     game.load.image("ground", "assets/img/ground.jpeg");
     game.load.spritesheet(
       "dinosaur",
-      "assets/img/principal.jpeg",
-      54,
-      55.65,
-      23
+      "assets/img/principal.png",
+      56,
+      47,
+      13
     );
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
@@ -20,7 +20,7 @@ var GamePlay = {
     this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
     this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
     this.dino = game.add.sprite(game.with / 2, game.height / 2, "dinosaur");
-    this.dino.frame = 1;
+    this.dino.frame = 2;
   },
   update: function () {},
 };
