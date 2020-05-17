@@ -20,7 +20,7 @@ var GamePlay = {
     this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
     this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
     this.dino = game.add.sprite(game.with / 2, game.height / 2, "dinosaur");
-    this.dino.frame = 2;
+    this.dino.frame = 13;
   },
   update: function () {},
 };
