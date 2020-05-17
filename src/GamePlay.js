@@ -1,8 +1,27 @@
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, "game_block");
+var game = new Phaser.Game(1000, 418, Phaser.CANVAS, "game_block");
 
 var GamePlay = {
-  preload: function () {},
-  create: function () {},
+  preload: function () {
+    game.load.image("background", "assets/img/background.png");
+    game.load.image("ground", "assets/img/ground.jpeg");
+    game.load.spritesheet(
+      "dinosaur",
+      "assets/img/principal.jpeg",
+      54,
+      55.65,
+      23
+    );
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.pageAlignHorizontally = true;
+    game.scale.pageAlignVertically = true;
+  },
+
+  create: function () {
+    this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
+    this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
+    this.dino = game.add.sprite(game.with / 2, game.height / 2, "dinosaur");
+    this.dino.frame = 1;
+  },
   update: function () {},
 };
 
