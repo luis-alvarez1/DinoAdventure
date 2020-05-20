@@ -41,7 +41,7 @@ var GamePlay = {
     if (this.movement.right.isDown) {
       this.dino.scale.setTo(1);
 
-      this.dino.position.x += 1;
+      this.dino.position.x += 2;
       this.dino.animations.play("walk");
 
       if (this.direction != "right") {
@@ -50,7 +50,7 @@ var GamePlay = {
     } else if (this.movement.left.isDown) {
       this.dino.scale.setTo(-1, 1);
 
-      this.dino.position.x -= 1;
+      this.dino.position.x -= 2;
       this.dino.animations.play("walk");
 
       if (this.direction != "left") {
