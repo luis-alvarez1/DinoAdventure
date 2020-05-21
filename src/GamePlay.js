@@ -6,6 +6,7 @@ var GamePlay = {
     game.load.image("background", "assets/img/background.png");
     game.load.image("ground", "assets/img/ground.jpeg");
     game.load.spritesheet("dinosaur", "assets/img/principal.png", 56, 47, 13);
+    game.load.spritesheet("enemy1", "assets/img/enemigo1.png", 59, 46, 10);
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
@@ -15,7 +16,9 @@ var GamePlay = {
     this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
     this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
     this.dino = game.add.sprite(100, 340, "dinosaur");
+    this.enemy1 = game.add.sprite(800, 318, "enemy1");
     this.dino.anchor.setTo(0.5);
+<<<<<<< Updated upstream
     this.dino.frame = 12;
 
     this.dino.animations.add(
@@ -64,6 +67,10 @@ var GamePlay = {
       }
       this.direction = "wating";
     }
+=======
+    this.dino.frame = 13;
+    this.enemy1.frame = 10;
+>>>>>>> Stashed changes
   },
 };
 
