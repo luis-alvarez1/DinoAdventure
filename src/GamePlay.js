@@ -6,6 +6,7 @@ const GamePlay = {
     game.load.image("background", "assets/img/background.png");
     game.load.image("ground", "assets/img/ground.jpeg");
     game.load.spritesheet("dinosaur", "assets/img/principal.png", 56, 47, 13);
+    game.load.spritesheet("enemy1", "assets/img/enemigo1.png", 59, 46, 10);
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
@@ -15,8 +16,10 @@ const GamePlay = {
     this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
     this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
     this.dino = game.add.sprite(100, 340, "dinosaur");
+    
     this.dino.anchor.setTo(0.5);
     this.dino.frame = 12;
+    
 
     this.dino.animations.add(
       "walk",
@@ -35,6 +38,14 @@ const GamePlay = {
     game.physics.arcade.enable(this.dino);
 
     this.dino.body.colliderWorldBounds = true;
+    
+      this.enemy1 = this.game.add.sprite(800, 318, "enemy1");
+      this.enemy1.animations.add('walking', [1,2,3,4,5,6,7,8,10,11,12], 7, true);
+      this.enemy1.animations.play('walking');
+      
+      var tween = game.add.tween(this.enemy1);
+      tween.to({x:600}, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+      
   },
   update: function () {
     if (this.direction == "wating") {
@@ -67,6 +78,19 @@ const GamePlay = {
       }
 
       this.direction = "wating";
+    }
+    
+    //movimiento enemigo 1
+    var limite1 = 800;
+    var limite2 = 600;
+    var posicionxEnemy1 = this.enemy1.x;
+    
+    
+    if (posicionxEnemy1 == limite1){
+      this.enemy1.scale.setTo(-1,1);
+    }
+    if (posicionxEnemy1 == limite2){
+      this.enemy1.scale.setTo(1,1);
     }
   },
 };
