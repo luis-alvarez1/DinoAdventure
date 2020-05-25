@@ -1,6 +1,6 @@
-var game = new Phaser.Game(1000, 418, Phaser.CANVAS, "game_block");
+const game = new Phaser.Game(1000, 418, Phaser.CANVAS, "game_block");
 
-var GamePlay = {
+const GamePlay = {
   preload: function () {
     game.stage.backgroundColor = "#000000";
     game.load.image("background", "assets/img/background.png");
