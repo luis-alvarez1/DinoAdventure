@@ -29,6 +29,8 @@ var GamePlay = {
       true
     );
 
+    this.dino.animations.add("bite", [11], 10, true);
+
     this.movement = game.input.keyboard.createCursorKeys();
     this.jumpKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
@@ -69,11 +71,13 @@ var GamePlay = {
         this.direction = "left";
       }
     } else if (this.jumpKey.isDown) {
-      console.log("space");
+      this.dino.animations.play("bite");
+      this.direction = "bite";
     } else {
       if (this.direction != "waiting") {
         this.dino.animations.stop();
       }
+
       this.direction = "wating";
     }
     
