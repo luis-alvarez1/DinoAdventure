@@ -101,15 +101,8 @@ const GamePlay = {
       this.direction = "wating";
     }
 
-    if (
-      this.isRectangleOverlapping(
-        this.getBounds(this.dino),
-        this.getBounds(this.enemy1)
-      ) &&
-      this.direction != "bite"
-    ) {
-      console.log("muerto");
-    } else if (
+    //Valida muertes
+  if(
       this.isRectangleOverlapping(
         this.getBounds(this.dino),
         this.getBounds(this.enemy1)
@@ -117,6 +110,14 @@ const GamePlay = {
       this.direction == "bite"
     ) {
       console.log("enemigo muerto");
+    }else if (
+      this.isRectangleOverlapping(
+        this.getBounds(this.dino),
+        this.getBounds(this.enemy1)
+      ) &&
+      this.direction != "bite"
+    ) {
+      console.log("muerto");
     }
 
     //movimiento enemigo 1
