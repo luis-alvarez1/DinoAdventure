@@ -8,6 +8,7 @@ var GamePlay = {
     game.load.image("ground", "assets/img/ground.jpeg");
     game.load.spritesheet("dinosaur", "assets/img/principal.png", 56, 47, 13);
     game.load.spritesheet("enemy1", "assets/img/enemigo1.png", 59, 46, 10);
+    game.load.spritesheet("titleDino","assets/img/titulodino.png", 443, 182, 1);
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
@@ -16,8 +17,8 @@ var GamePlay = {
   create: function () {
     this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
     this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
-    this.dino = game.add.sprite(100, 340, "dinosaur");
     
+    this.dino = game.add.sprite(100, 340, "dinosaur");
     this.dino.anchor.setTo(0.5);
     this.dino.frame = 12;
     
