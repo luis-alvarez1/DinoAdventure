@@ -1,12 +1,13 @@
-const game = new Phaser.Game(1000, 418, Phaser.CANVAS, "game_block");
+var game = new Phaser.Game(1000, 418, Phaser.CANVAS, "game_block");
 
-const GamePlay = {
+var GamePlay = {
   preload: function () {
     game.stage.backgroundColor = "#000000";
     game.load.image("background", "assets/img/background.png");
     game.load.image("ground", "assets/img/ground.jpeg");
     game.load.spritesheet("dinosaur", "assets/img/principal.png", 56, 47, 13);
     game.load.spritesheet("enemy1", "assets/img/enemigo1.png", 59, 46, 10);
+    game.load.spritesheet("lives", "assets/img/vidas.png", 107, 40, 4);
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
@@ -15,9 +16,10 @@ const GamePlay = {
   create: function () {
     this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
     this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
+    this.live = game.add.sprite(50, 15, "lives");
+    this.live.anchor.setTo(0.5);
+    this.live.frame = 0;
     this.dino = game.add.sprite(100, 340, "dinosaur");
-    this.enemy1 = this.game.add.sprite(800, 318, "enemy1");
-
     this.dino.anchor.setTo(0.5);
     this.dino.frame = 12;
 
@@ -39,16 +41,21 @@ const GamePlay = {
 
     this.dino.body.colliderWorldBounds = true;
 
+    this.enemy1 = this.game.add.sprite(800, 318, "enemy1");
     this.enemy1.animations.add(
       "walking",
-      [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12],
+      [1, 2, 3, 4, 5, 6, 7, 10, 11, 12],
       7,
       true
     );
     this.enemy1.animations.play("walking");
 
     var tween = game.add.tween(this.enemy1);
-    tween.to({ x: 600 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    tween.to({ x: 600 }, 5000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+  },
+  render: function () {
+    game.debug.spriteBounds(this.dino);
+    game.debug.spriteBounds(this.enemy1);
   },
   getBounds: function (object) {
     var x0 = object.x - Math.abs(object.width) / 2;
@@ -100,23 +107,24 @@ const GamePlay = {
 
       this.direction = "wating";
     }
-
-    //Valida muertes
-  if(
-      this.isRectangleOverlapping(
-        this.getBounds(this.dino),
-        this.getBounds(this.enemy1)
-      ) &&
-      this.direction == "bite"
-    ) {
-      console.log("enemigo muerto");
-    }else if (
+    if (
       this.isRectangleOverlapping(
         this.getBounds(this.dino),
         this.getBounds(this.enemy1)
       ) &&
       this.direction != "bite"
     ) {
+      console.log("enemigo muerto");
+      this.enemy1.animations.stop();
+      this.enemy1.frame = 9;
+    } else if (
+      this.isRectangleOverlapping(
+        this.getBounds(this.dino),
+        this.getBounds(this.enemy1)
+      ) &&
+      this.direction == "bite"
+    ) {
+      this.live.frame = 3;
       console.log("muerto");
     }
 
@@ -126,10 +134,10 @@ const GamePlay = {
     var posicionxEnemy1 = this.enemy1.x;
 
     if (posicionxEnemy1 == limitRight) {
-      this.enemy1.scale.setTo(-1, 1);
+      this.enemy1.scale.setTo(1, 1);
     }
     if (posicionxEnemy1 == limitLeft) {
-      this.enemy1.scale.setTo(1, 1);
+      this.enemy1.scale.setTo(-1, 1);
     }
   },
 };
