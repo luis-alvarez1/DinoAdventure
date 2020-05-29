@@ -8,17 +8,37 @@ var GamePlay = {
     game.load.spritesheet("dinosaur", "assets/img/principal.png", 56, 47, 13);
     game.load.spritesheet("enemy1", "assets/img/enemigo1.png", 59, 46, 10);
     game.load.spritesheet("lives", "assets/img/vidas.png", 107, 40, 4);
+    game.load.spritesheet("titulodino", "assets/img/titulodino.png", 257, 109, 1);
+    game.load.spritesheet("tituloadventure", "assets/img/tituloadventure.png", 317, 76, 1);
+    game.load.spritesheet("gameOver", "assets/img/gameOver.png", 161, 112, 1);
+    game.load.spritesheet("buttonPlay", "assets/img/playGame.png", 156, 43, 1);
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
   },
-
+  
   create: function () {
+    
+    
     this.background = game.add.tileSprite(0, 0, 1000, 413, "background");
     this.ground = game.add.tileSprite(0, 350, 1000, 100, "ground");
-    this.live = game.add.sprite(50, 15, "lives");
-    this.live.anchor.setTo(0.5);
+    
+    this.live = game.add.sprite(10, 10, "lives");
     this.live.frame = 0;
+    
+    this.titleoDino = game.add.sprite(390, 50, "titulodino");
+    this.titleoDino.frame = 0;
+    
+    this.titleoAdventure = game.add.sprite(350, 150, "tituloadventure");
+    this.titleoAdventure.frame = 0;
+    
+    this.gameOver = game.add.sprite(440, 100, "gameOver");
+    this.gameOver.frame = 0;
+    this.gameOver.visible = false;
+
+
+    this.buttonPlay = game.add.button(430, 220, "buttonPlay",actionOnClick, this,2,1,0 );
+    
     this.dino = game.add.sprite(100, 340, "dinosaur");
     this.dino.anchor.setTo(0.5);
     this.dino.frame = 12;
@@ -49,9 +69,26 @@ var GamePlay = {
       true
     );
     this.enemy1.animations.play("walking");
-
     var tween = game.add.tween(this.enemy1);
     tween.to({ x: 600 }, 5000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+
+    this.currentScore = 0;
+    var style = {
+      font: 'bold 20pt Arial',
+      fill: 'white',
+      align: 'center'
+    }
+    this.scoreText = game.add.text(game.width/2, 40, '0', style);
+    this.play = false;
+    function actionOnClick () {
+      this.play = true;
+      
+    }
+  },
+  
+  winScore: function (){
+    this.currentScore+=100;
+    this.scoreText.text = this.currentScore;
   },
   render: function () {
     game.debug.spriteBounds(this.dino);
@@ -76,69 +113,88 @@ var GamePlay = {
     return true; // devuelve true si se tocan
   },
   update: function () {
-    if (this.direction == "wating") {
-      this.dino.frame = 12;
-    }
-    if (this.movement.right.isDown) {
-      this.dino.scale.setTo(1);
+    var play = this.play;
+    
+    if (play==true) {
+      this.titleoDino.visible = false;
+      this.titleoAdventure.visible = false;
+      this.buttonPlay.visible = false;
 
-      this.dino.position.x += 2;
-      this.dino.animations.play("walk");
-
-      if (this.direction != "right") {
-        this.direction = "right";
+      if (this.direction == "wating") {
+        this.dino.frame = 12;
       }
-    } else if (this.movement.left.isDown) {
-      this.dino.scale.setTo(-1, 1);
-
-      this.dino.position.x -= 2;
-      this.dino.animations.play("walk");
-
-      if (this.direction != "left") {
-        this.direction = "left";
+      if (this.movement.right.isDown) {
+        this.dino.scale.setTo(1);
+  
+        this.dino.position.x += 2;
+        this.dino.animations.play("walk");
+  
+        if (this.direction != "right") {
+          this.direction = "right";
+        }
+      } else if (this.movement.left.isDown) {
+        this.dino.scale.setTo(-1, 1);
+  
+        this.dino.position.x -= 2;
+        this.dino.animations.play("walk");
+  
+        if (this.direction != "left") {
+          this.direction = "left";
+        }
+      } else if (this.biteKey.isDown) {
+        this.dino.animations.play("bite");
+        this.direction = "bite";
+      } else {
+        if (this.direction != "waiting") {
+          this.dino.animations.stop("walk");
+        }
+  
+        this.direction = "wating";
       }
-    } else if (this.biteKey.isDown) {
-      this.dino.animations.play("bite");
-      this.direction = "bite";
-    } else {
-      if (this.direction != "waiting") {
-        this.dino.animations.stop();
+      
+      if (
+        this.isRectangleOverlapping(
+          this.getBounds(this.dino),
+          this.getBounds(this.enemy1)
+        ) &&
+        this.direction == "bite"
+      ) {
+        console.log("enemigo muerto");
+        this.enemy1.animations.stop();
+        this.enemy1.frame = 9;
+        if (this.enemy1.frame = 9 && this.enemy1.visible){
+          this.enemy1.visible = false;  
+          this.winScore();
+        }
+        
+      } else if (
+        this.isRectangleOverlapping(
+          this.getBounds(this.dino),
+          this.getBounds(this.enemy1)
+        ) &&
+        this.direction != "bite"
+      ) {
+          this.live.frame = 3;
+         if(this.live.frame = 3  ){
+            this.gameOver.visible = true;
+            this.dino.animations.stop();
+         }
+        
       }
-
-      this.direction = "wating";
+  
+      //movimiento enemigo 1
+      var limitRight = 800;
+      var limitLeft = 600;
+      var posicionxEnemy1 = this.enemy1.x;
+  
+      if (posicionxEnemy1 == limitRight) {
+        this.enemy1.scale.setTo(1, 1);
+      }
+      if (posicionxEnemy1 == limitLeft) {
+        this.enemy1.scale.setTo(-1, 1);
+      }
     }
-    if (
-      this.isRectangleOverlapping(
-        this.getBounds(this.dino),
-        this.getBounds(this.enemy1)
-      ) &&
-      this.direction != "bite"
-    ) {
-      console.log("enemigo muerto");
-      this.enemy1.animations.stop();
-      this.enemy1.frame = 9;
-    } else if (
-      this.isRectangleOverlapping(
-        this.getBounds(this.dino),
-        this.getBounds(this.enemy1)
-      ) &&
-      this.direction == "bite"
-    ) {
-      this.live.frame = 3;
-      console.log("muerto");
-    }
-
-    //movimiento enemigo 1
-    var limitRight = 800;
-    var limitLeft = 600;
-    var posicionxEnemy1 = this.enemy1.x;
-
-    if (posicionxEnemy1 == limitRight) {
-      this.enemy1.scale.setTo(1, 1);
-    }
-    if (posicionxEnemy1 == limitLeft) {
-      this.enemy1.scale.setTo(-1, 1);
-    }
+    
   },
 };
 
