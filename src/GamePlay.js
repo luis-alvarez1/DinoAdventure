@@ -71,6 +71,7 @@ var GamePlay = {
     this.enemy1.animations.play("walking");
     var tween = game.add.tween(this.enemy1);
     tween.to({ x: 600 }, 5000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    
 
     this.currentScore = 0;
     var style = {
@@ -95,13 +96,14 @@ var GamePlay = {
     game.debug.spriteBounds(this.enemy1);
   },
   getBounds: function (object) {
-    var x0 = object.x - Math.abs(object.width) / 2;
+    var x0 = object.x - Math.abs(object.width)/2;
     var y0 = object.y - object.height / 2;
     var width = Math.abs(object.width);
     var height = object.height;
 
     return new Phaser.Rectangle(x0, y0, width, height);
   },
+  
   isRectangleOverlapping: function (rect1, rect2) {
     //se valida si los recangulos se tocan o se sobreponen y devuelve false si no es así
     if (rect1.x > rect2.x + rect2.width || rect2.x > rect1.x + rect1.width) {
@@ -119,6 +121,7 @@ var GamePlay = {
       this.titleoDino.visible = false;
       this.titleoAdventure.visible = false;
       this.buttonPlay.visible = false;
+      
 
       if (this.direction == "wating") {
         this.dino.frame = 12;
@@ -178,6 +181,7 @@ var GamePlay = {
          if(this.live.frame = 3  ){
             this.gameOver.visible = true;
             this.dino.animations.stop();
+            console.log("muerto");
          }
         
       }
