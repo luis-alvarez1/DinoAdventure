@@ -96,9 +96,9 @@ var GamePlay = {
     game.debug.spriteBounds(this.enemy1);
   },
   getBounds: function (object) {
-    var x0 = object.x - Math.abs(object.width)/2;
+    var x0 = object.x - Math.abs(object.width)/4;
     var y0 = object.y - object.height / 2;
-    var width = Math.abs(object.width);
+    var width = Math.abs(object.width)/2;
     var height = object.height;
 
     return new Phaser.Rectangle(x0, y0, width, height);
