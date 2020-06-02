@@ -117,11 +117,9 @@ var GamePlay = {
 
         return new Phaser.Rectangle(x0, y0, width, height);
     },
-
-
+    isRectangleOverlapping: isRectangleOverlapping,
     update: function() {
 
-        var isRectangleOverlappingOverlapping = require('./functions');
         var play = this.play;
 
         if (play == true) {
@@ -162,7 +160,7 @@ var GamePlay = {
             }
 
             if (
-                isRectangleOverlappingOverlapping(
+                this.isRectangleOverlapping(
                     this.getBounds(this.dino),
                     this.getBounds(this.enemy1)
                 ) &&
@@ -176,7 +174,7 @@ var GamePlay = {
                     this.winScore();
                 }
             } else if (
-                isRectangleOverlappingOverlapping(
+                this.isRectangleOverlapping(
                     this.getBounds(this.dino),
                     this.getBounds(this.enemy1)
                 ) &&

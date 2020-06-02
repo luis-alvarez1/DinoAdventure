@@ -1,4 +1,4 @@
-function isRectangleOverlappingOverlapping(rect1, rect2) {
+function isRectangleOverlapping(rect1, rect2) {
     //se valida si los recangulos se tocan o se sobreponen y devuelve false si no es así
     if (rect1.x > rect2.x + rect2.width || rect2.x > rect1.x + rect1.width) {
         return false;
@@ -8,4 +8,3 @@ function isRectangleOverlappingOverlapping(rect1, rect2) {
     }
     return true; // devuelve true si se tocan
 }
-module.exports = isRectangleOverlappingOverlapping;

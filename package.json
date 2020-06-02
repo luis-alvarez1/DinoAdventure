@@ -24,6 +24,7 @@
     "jest": "^26.0.1"
   },
   "dependencies": {
+    "@jest/globals": "^26.0.1",
     "phaser-ce": "^2.8.2"
   }
 }
