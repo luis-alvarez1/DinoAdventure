@@ -36,11 +36,11 @@ var GamePlay = {
     this.live = game.add.sprite(10, 10, "lives");
     this.live.frame = 0;
 
-    this.titleoDino = game.add.sprite(390, 50, "titulodino");
-    this.titleoDino.frame = 0;
+    this.titleDino = game.add.sprite(390, 50, "titulodino");
+    this.titleDino.frame = 0;
 
-    this.titleoAdventure = game.add.sprite(350, 150, "tituloadventure");
-    this.titleoAdventure.frame = 0;
+    this.titleAdventure = game.add.sprite(350, 150, "tituloadventure");
+    this.titleAdventure.frame = 0;
 
     this.gameOver = game.add.sprite(440, 100, "gameOver");
     this.gameOver.frame = 0;
@@ -112,15 +112,15 @@ var GamePlay = {
     game.debug.spriteBounds(this.enemy1);
   },
   getBounds: function (object) {
-    var x0 = object.x - Math.abs(object.width)/4;
+    var x0 = object.x - Math.abs(object.width) / 4;
     var y0 = object.y - object.height / 2;
-    var width = Math.abs(object.width)/2;
+    var width = Math.abs(object.width) / 2;
     var height = object.height;
 
     return new Phaser.Rectangle(x0, y0, width, height);
   },
 
-  isRectangleOverlapping: function (rect1, rect2) {
+  isRectangleOverlappingOverlapping: function (rect1, rect2) {
     //se valida si los recangulos se tocan o se sobreponen y devuelve false si no es así
     if (rect1.x > rect2.x + rect2.width || rect2.x > rect1.x + rect1.width) {
       return false;
@@ -130,12 +130,13 @@ var GamePlay = {
     }
     return true; // devuelve true si se tocan
   },
+
   update: function () {
     var play = this.play;
 
     if (play == true) {
-      this.titleoDino.visible = false;
-      this.titleoAdventure.visible = false;
+      this.titleDino.visible = false;
+      this.titleAdventure.visible = false;
       this.buttonPlay.visible = false;
 
       if (this.direction == "wating") {
@@ -171,7 +172,7 @@ var GamePlay = {
       }
 
       if (
-        this.isRectangleOverlapping(
+        this.isRectangleOverlappingOverlapping(
           this.getBounds(this.dino),
           this.getBounds(this.enemy1)
         ) &&
@@ -185,7 +186,7 @@ var GamePlay = {
           this.winScore();
         }
       } else if (
-        this.isRectangleOverlapping(
+        this.isRectangleOverlappingOverlapping(
           this.getBounds(this.dino),
           this.getBounds(this.enemy1)
         ) &&
