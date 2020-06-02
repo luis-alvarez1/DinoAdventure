@@ -22,5 +22,8 @@
   "homepage": "https://github.com/luis-alvarez1/DinoAdventure#readme",
   "devDependencies": {
     "jest": "^26.0.1"
+  },
+  "dependencies": {
+    "phaser-ce": "^2.8.2"
   }
 }
