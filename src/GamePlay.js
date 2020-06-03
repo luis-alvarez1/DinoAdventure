@@ -12,6 +12,8 @@ var GamePlay = {
     game.load.spritesheet("tituloadventure", "assets/img/tituloadventure.png", 317, 76, 1);
     game.load.spritesheet("gameOver", "assets/img/gameOver.png", 161, 112, 1);
     game.load.spritesheet("buttonPlay", "assets/img/playGame.png", 156, 43, 1);
+    game.load.spritesheet("food", "assets/img/comida.png", 50, 39, 1);
+    game.load.spritesheet("boss", "assets/img/boss.png", 90, 90, 8);
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
@@ -35,6 +37,10 @@ var GamePlay = {
     this.gameOver = game.add.sprite(440, 100, "gameOver");
     this.gameOver.frame = 0;
     this.gameOver.visible = false;
+
+    this.food = game.add.sprite(80, 340, "food");
+    this.food.anchor.setTo(0.5);
+    this.food.visible = false;
 
 
     this.buttonPlay = game.add.button(430, 220, "buttonPlay",actionOnClick, this,2,1,0 );
@@ -64,14 +70,26 @@ var GamePlay = {
     this.enemy1 = this.game.add.sprite(800, 318, "enemy1");
     this.enemy1.animations.add(
       "walking",
-      [1, 2, 3, 4, 5, 6, 7, 10, 11, 12],
-      7,
+      [1,2,3,4,5,6,7,8,10,11,12,0,5,6,7,8],
+      4,
       true
     );
     this.enemy1.animations.play("walking");
     var tween = game.add.tween(this.enemy1);
-    tween.to({ x: 600 }, 5000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    tween.to({ x: 500 }, 7000, Phaser.Easing.Linear.None, true, 0, 1000, true);
     
+    this.boss = this.game.add.sprite(800, 318, "boss");
+    this.boss.anchor.setTo(0.5);
+    this.boss.visible = false;
+    this.boss.animations.add(
+      "walking",
+      [7,6,5,4,7,6,5,4,3,2,1,0],
+      4,
+      true
+    );
+    this.boss.animations.play("walking");
+    var tween = game.add.tween(this.boss);
+    tween.to({ x: 500 }, 7000, Phaser.Easing.Linear.None, true, 0, 1000, true);
 
     this.currentScore = 0;
     var style = {
@@ -90,10 +108,16 @@ var GamePlay = {
   winScore: function (){
     this.currentScore+=100;
     this.scoreText.text = this.currentScore;
+  },nextLevel: function(){
+    console.log("siguiente nivel");
+    this.boss.visible = true;
   },
+  
   render: function () {
     game.debug.spriteBounds(this.dino);
     game.debug.spriteBounds(this.enemy1);
+    game.debug.spriteBounds(this.food);
+    game.debug.spriteBounds(this.boss);
   },
   getBounds: function (object) {
     var x0 = object.x - Math.abs(object.width)/4;
@@ -103,7 +127,6 @@ var GamePlay = {
 
     return new Phaser.Rectangle(x0, y0, width, height);
   },
-  
   isRectangleOverlapping: function (rect1, rect2) {
     //se valida si los recangulos se tocan o se sobreponen y devuelve false si no es así
     if (rect1.x > rect2.x + rect2.width || rect2.x > rect1.x + rect1.width) {
@@ -121,7 +144,6 @@ var GamePlay = {
       this.titleoDino.visible = false;
       this.titleoAdventure.visible = false;
       this.buttonPlay.visible = false;
-      
 
       if (this.direction == "wating") {
         this.dino.frame = 12;
@@ -154,48 +176,97 @@ var GamePlay = {
   
         this.direction = "wating";
       }
+      if(this.enemy1.visible){
+        if (
+          this.isRectangleOverlapping(
+            this.getBounds(this.dino),
+            this.getBounds(this.enemy1)
+          ) &&
+          this.direction == "bite"
+        ) {
+          console.log("enemigo muerto");
+          this.enemy1.animations.stop();
+          this.enemy1.frame = 9;
+          if (this.enemy1.frame = 9 && this.enemy1.visible){
+            this.enemy1.visible = false;  
+            this.winScore();
+            this.food.visible = true;
+            
+            
+          }
+          
+        } else if (
+          this.isRectangleOverlapping(
+            this.getBounds(this.dino),
+            this.getBounds(this.enemy1)
+          ) &&
+          this.direction != "bite"
+        ) {    
+          
+          if ((this.enemy1.frame > 0) && (this.enemy1.frame < 5) ) {
+            this.gameOver.visible = true;
+            
+          }       
+        }
+      }
       
-      if (
+      
+      if(
         this.isRectangleOverlapping(
           this.getBounds(this.dino),
-          this.getBounds(this.enemy1)
+          this.getBounds(this.food)
         ) &&
         this.direction == "bite"
       ) {
-        console.log("enemigo muerto");
-        this.enemy1.animations.stop();
-        this.enemy1.frame = 9;
-        if (this.enemy1.frame = 9 && this.enemy1.visible){
-          this.enemy1.visible = false;  
-          this.winScore();
+      if(this.food.visible){
+        this.food.visible = false;
+        this.nextLevel();
+        this.winScore();
         }
-        
-      } else if (
-        this.isRectangleOverlapping(
-          this.getBounds(this.dino),
-          this.getBounds(this.enemy1)
-        ) &&
-        this.direction != "bite"
-      ) {
-          this.live.frame = 3;
-         if(this.live.frame = 3  ){
-            this.gameOver.visible = true;
-            this.dino.animations.stop();
-            console.log("muerto");
-         }
-        
       }
-  
+      if(this.boss.visible){
+        if (
+          this.isRectangleOverlapping(
+            this.getBounds(this.dino),
+            this.getBounds(this.boss)
+          ) &&
+          this.direction == "bite"
+        ) {
+          console.log("enemigo muerto");
+          this.boss.animations.stop();
+          if (this.boss.frame = 9 && this.boss.visible){
+            this.boss.visible = false;  
+            this.winScore();      
+          }
+          
+        } else if (
+          this.isRectangleOverlapping(
+            this.getBounds(this.dino),
+            this.getBounds(this.boss)
+          ) &&
+          this.direction != "bite"
+        ) {    
+          
+          if ((this.boss.frame == 0) || (this.boss.frame == 1) ) {
+            this.gameOver.visible = true;
+            
+          }       
+        }
+      }
+      
       //movimiento enemigo 1
       var limitRight = 800;
-      var limitLeft = 600;
+      var limitLeft = 500;
       var posicionxEnemy1 = this.enemy1.x;
+      var posicionxEnemy1 = this.boss.x;
   
       if (posicionxEnemy1 == limitRight) {
         this.enemy1.scale.setTo(1, 1);
+        this.boss.scale.setTo(1, 1);
       }
       if (posicionxEnemy1 == limitLeft) {
         this.enemy1.scale.setTo(-1, 1);
+        this.boss.scale.setTo(-1, 1);
       }
     }
     
