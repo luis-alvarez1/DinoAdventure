@@ -14,6 +14,7 @@ var GamePlay = {
     game.load.spritesheet("buttonPlay", "assets/img/playGame.png", 156, 43, 1);
     game.load.spritesheet("food", "assets/img/comida.png", 50, 39, 1);
     game.load.spritesheet("boss", "assets/img/boss.png", 90, 90, 8);
+    game.load.spritesheet("deathBoss", "assets/img/muerteBoss.png", 110, 91, 5);
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
@@ -90,7 +91,16 @@ var GamePlay = {
     this.boss.animations.play("walking");
     var tween = game.add.tween(this.boss);
     tween.to({ x: 500 }, 7000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-
+    
+    this.deathBoss = this.game.add.sprite(800, 318, "deathBoss");
+    this.deathBoss.anchor.setTo(0.5);
+    this.deathBoss.visible = false;
+    this.deathBoss.animations.add(
+      "death",
+      [4,3,2,1,0,],
+      2,
+      
+    );
     this.currentScore = 0;
     var style = {
       font: 'bold 20pt Arial',
@@ -111,13 +121,6 @@ var GamePlay = {
   },nextLevel: function(){
     console.log("siguiente nivel");
     this.boss.visible = true;
-  },
-  
-  render: function () {
-    game.debug.spriteBounds(this.dino);
-    game.debug.spriteBounds(this.enemy1);
-    game.debug.spriteBounds(this.food);
-    game.debug.spriteBounds(this.boss);
   },
   getBounds: function (object) {
     var x0 = object.x - Math.abs(object.width)/4;
@@ -236,7 +239,9 @@ var GamePlay = {
           this.boss.animations.stop();
           if (this.boss.frame = 9 && this.boss.visible){
             this.boss.visible = false;  
-            this.winScore();      
+            this.winScore();
+            this.deathBoss.visible = true;
+            this.deathBoss.animations.play("death");      
           }
           
         } else if (
