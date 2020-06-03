@@ -7,7 +7,7 @@ var GamePlay = {
     game.load.image("ground", "assets/img/ground.jpeg");
     game.load.spritesheet("dinosaur", "assets/img/principal.png", 56, 47, 13);
     game.load.spritesheet("enemy1", "assets/img/enemigo1.png", 59, 46, 10);
-    game.load.spritesheet("lives", "assets/img/vidas.png", 107, 40, 4);
+    game.load.spritesheet("lives", "assets/img/vidas.png", 37, 32, 1);
     game.load.spritesheet("titulodino", "assets/img/titulodino.png", 257, 109, 1);
     game.load.spritesheet("tituloadventure", "assets/img/tituloadventure.png", 317, 76, 1);
     game.load.spritesheet("gameOver", "assets/img/gameOver.png", 161, 112, 1);
@@ -68,7 +68,8 @@ var GamePlay = {
 
     this.dino.body.colliderWorldBounds = true;
 
-    this.enemy1 = this.game.add.sprite(800, 318, "enemy1");
+    this.enemy1 = this.game.add.sprite(800, 340, "enemy1");
+    this.enemy1.anchor.setTo(0.5);
     this.enemy1.animations.add(
       "walking",
       [1,2,3,4,5,6,7,8,10,11,12,0,5,6,7,8],
@@ -92,7 +93,7 @@ var GamePlay = {
     var tween = game.add.tween(this.boss);
     tween.to({ x: 500 }, 7000, Phaser.Easing.Linear.None, true, 0, 1000, true);
     
-    this.deathBoss = this.game.add.sprite(800, 318, "deathBoss");
+    this.deathBoss = this.game.add.sprite(800, 330, "deathBoss");
     this.deathBoss.anchor.setTo(0.5);
     this.deathBoss.visible = false;
     this.deathBoss.animations.add(
@@ -100,25 +101,59 @@ var GamePlay = {
       [4,3,2,1,0,],
       2,
       
-    );
+    );  
     this.currentScore = 0;
+    this.currentLive = 3;
     var style = {
       font: 'bold 20pt Arial',
       fill: 'white',
       align: 'center'
     }
+    this.liveText = game.add.text(50, 12, '3', style);
     this.scoreText = game.add.text(game.width/2, 40, '0', style);
+
     this.play = false;
     function actionOnClick () {
       this.play = true;
       
     }
+
+    function actionOnClick () {
+      this.play = true;
+      
+    }
   },
-  
+  render: function(){
+    game.debug.spriteBounds(this.dino);
+  },
+    perderVida: function(){
+      this.dino = game.add.sprite(100, 340, "dinosaur");
+      this.dino.anchor.setTo(0.5);
+      this.dino.animations.add(
+        "walk",
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        10,
+        true
+      );
+      this.dino.animations.add("bite", [11], 10, true);
+      this.currentLive-=1;
+      this.liveText.text = this.currentLive;
+
+      if (this.currentLive == 0) {
+        console.log("game over");
+        this.gameOver.visible = true;
+        this.dino.visible = false;
+      }
+   },
+   ganarVida: function (){
+      this.currentLive-=1;
+      this.liveText.text = this.currentLive;
+   },
   winScore: function (){
-    this.currentScore+=100;
-    this.scoreText.text = this.currentScore;
-  },nextLevel: function(){
+    this.currentLive+=1;
+    this.liveText.text = this.currentLive;
+  },
+  nextLevel: function(){
     console.log("siguiente nivel");
     this.boss.visible = true;
   },
@@ -207,12 +242,14 @@ var GamePlay = {
         ) {    
           
           if ((this.enemy1.frame > 0) && (this.enemy1.frame < 5) ) {
-            this.gameOver.visible = true;
-            
+              console.log("muerto")
+              if (this.dino.visible) {
+                this.dino.visible = false;
+                this.perderVida(); 
+              }
           }       
         }
       }
-      
       
       if(
         this.isRectangleOverlapping(
@@ -253,28 +290,32 @@ var GamePlay = {
         ) {    
           
           if ((this.boss.frame == 0) || (this.boss.frame == 1) ) {
-            this.gameOver.visible = true;
-            
+            if (this.dino.visible) {
+              console.log("muerto");
+              this.dino.visible = false;
+              this.perderVida(); 
+            }
           }       
         }
       }
       
-      //movimiento enemigo 1
-      var limitRight = 800;
-      var limitLeft = 500;
-      var posicionxEnemy1 = this.enemy1.x;
-      var posicionxEnemy1 = this.boss.x;
+     
   
-      if (posicionxEnemy1 == limitRight) {
-        this.enemy1.scale.setTo(1, 1);
-        this.boss.scale.setTo(1, 1);
-      }
-      if (posicionxEnemy1 == limitLeft) {
-        this.enemy1.scale.setTo(-1, 1);
-        this.boss.scale.setTo(-1, 1);
-      }
+      
     }
-    
+     //movimiento enemigo 1
+     var limitRight = 800;
+     var limitLeft = 500;
+     var posicionxEnemy1 = this.enemy1.x;
+     var posicionxEnemy1 = this.boss.x;
+    if (posicionxEnemy1 == limitRight) {
+      this.enemy1.scale.setTo(1, 1);
+      this.boss.scale.setTo(1, 1);
+    }
+    if (posicionxEnemy1 == limitLeft) {
+      this.enemy1.scale.setTo(-1, 1);
+      this.boss.scale.setTo(-1, 1);
+    }
   },
 };
 
