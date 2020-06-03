@@ -146,12 +146,12 @@ var GamePlay = {
       }
    },
    ganarVida: function (){
-      this.currentLive-=1;
+      this.currentLive+=1;
       this.liveText.text = this.currentLive;
    },
   winScore: function (){
-    this.currentLive+=1;
-    this.liveText.text = this.currentLive;
+    this.currentScore+=100;
+    this.scoreText.text = this.currentScore;
   },
   nextLevel: function(){
     console.log("siguiente nivel");
@@ -262,7 +262,8 @@ var GamePlay = {
         this.food.visible = false;
         this.nextLevel();
         this.winScore();
-        this.ganarVida
+        this.ganarVida();
+        
         }
       }
       if(this.boss.visible){
