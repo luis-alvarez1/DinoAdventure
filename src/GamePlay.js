@@ -262,6 +262,7 @@ var GamePlay = {
         this.food.visible = false;
         this.nextLevel();
         this.winScore();
+        this.ganarVida
         }
       }
       if(this.boss.visible){
